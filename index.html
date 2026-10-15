@@ -183,7 +183,6 @@
     .tilt-r { transform: rotate(2.5deg); }
   }
 
-  footer { margin-top: 40px; color: var(--soft); font-size: .9rem; }
 
   canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
 
@@ -197,7 +196,6 @@
 <canvas id="confetti"></canvas>
 
 <main>
-  <div class="kicker">hoje é o dia dela…</div>
   <h1>Feliz Aniversário,<br><em>Beatriz</em></h1>
   <p class="hint" id="hint">pede um desejo e toca no bolo para soprar as velas 🕯️</p>
 
@@ -245,7 +243,6 @@
     <button class="more" id="more">Mais uma 💌</button>
   </section>
 
-  <footer id="footer" style="display:none">feito com amor (e um bocadinho de código) 💕</footer>
 </main>
 
 <script>
@@ -382,7 +379,6 @@
       show('memories', 900);
       setTimeout(() => {
         document.getElementById('reasons').style.display = 'block';
-        document.getElementById('footer').style.display = 'block';
         nextReason();
         document.getElementById('heroPhoto').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 500);
