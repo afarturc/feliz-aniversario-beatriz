@@ -139,7 +139,6 @@
   .letter .sign { text-align: right; margin-top: 1em; }
 
   .reasons { margin: 40px auto 0; max-width: 560px; width: 100%; display: none; }
-  .reasons h2 { font-weight: 400; font-style: italic; font-size: 1.6rem; margin-bottom: 14px; }
   .reason-card {
     background: #fff; border-radius: 14px; padding: 22px 20px; min-height: 96px;
     display: flex; align-items: center; justify-content: center;
@@ -155,6 +154,34 @@
     transition: transform .15s;
   }
   button.more:active { transform: scale(.96); }
+
+  /* polaroids */
+  .reveal { display: none; opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1); }
+  .reveal.show { opacity: 1; transform: translateY(0); }
+  .polaroid {
+    background: #fff; padding: 12px 12px 0; border-radius: 3px;
+    box-shadow: 0 18px 40px -18px rgba(74,31,43,.45);
+  }
+  .polaroid img { display: block; width: 100%; object-fit: cover; border-radius: 1px; }
+  .polaroid figcaption {
+    font-family: "Caveat", cursive; font-size: 1.5rem; color: var(--ink);
+    padding: 10px 4px 14px; text-align: center;
+  }
+  .hero-photo { max-width: 460px; width: 100%; margin: 26px auto 0; }
+  .hero-photo.show { transform: rotate(1.5deg); }
+  .hero-photo img { aspect-ratio: 4 / 3; }
+  .memories { margin: 56px auto 0; max-width: 620px; width: 100%; }
+  .memories h2, .reasons h2 { font-weight: 400; font-style: italic; font-size: 1.6rem; margin-bottom: 20px; }
+  .polaroids { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .polaroids img { aspect-ratio: 3 / 4; }
+  .polaroids .polaroid { transition: transform .3s; }
+  .tilt-l { transform: rotate(-3deg); }
+  .tilt-r { transform: rotate(2.5deg) translateY(14px); }
+  .polaroids .polaroid:hover { transform: rotate(0) scale(1.03); }
+  @media (max-width: 480px) {
+    .polaroids { grid-template-columns: 1fr; gap: 26px; padding: 0 12px; }
+    .tilt-r { transform: rotate(2.5deg); }
+  }
 
   footer { margin-top: 40px; color: var(--soft); font-size: .9rem; }
 
@@ -185,13 +212,32 @@
     </div>
   </div>
 
+  <figure class="polaroid hero-photo reveal" id="heroPhoto">
+    <img src="img/beatriz.jpg" alt="Beatriz" loading="lazy">
+    <figcaption>a aniversariante mais bonita 🎂</figcaption>
+  </figure>
+
   <article class="letter" id="letter">
     <p>Beatriz,</p>
-    <p>Feliz aniversário, meu amor! Hoje o mundo celebra o dia em que ficou um bocadinho mais bonito — e eu tenho a sorte de te ter ao meu lado.</p>
+    <p>Feliz aniversário, meu amor! Hoje o mundo celebra o dia em que ficou um bocadinho mais bonito, e eu tenho a sorte de te ter ao meu lado.</p>
     <p>Obrigado por cada gargalhada, cada abraço e por tornares os dias normais em dias especiais. Que este novo ano te traga tudo o que mereces (que é muito).</p>
-    <p>Amo-te muito. 💖</p>
-    <p class="sign">— Artur</p>
+    <p>Gosto muito de ti. 💖</p>
+    <p class="sign">Artur</p>
   </article>
+
+  <section class="memories reveal" id="memories">
+    <h2>Onde tudo começou</h2>
+    <div class="polaroids">
+      <figure class="polaroid tilt-l">
+        <img src="img/bebidas.jpg" alt="Duas bebidas no nosso primeiro encontro" loading="lazy">
+        <figcaption>o nosso primeiro brinde 🥂</figcaption>
+      </figure>
+      <figure class="polaroid tilt-r">
+        <img src="img/por-do-sol.jpg" alt="Pôr do sol sobre o mar no nosso primeiro encontro" loading="lazy">
+        <figcaption>o nosso primeiro pôr do sol 🌅</figcaption>
+      </figure>
+    </div>
+  </section>
 
   <section class="reasons" id="reasons">
     <h2>Algumas razões porque te adoro</h2>
@@ -211,6 +257,7 @@
     "Contigo, até não fazer nada é o melhor plano.",
     "Tens a gargalhada mais contagiante do mundo.",
     "Fazes-me querer ser melhor todos os dias.",
+    "O nosso primeiro encontro continua a ser um dos meus dias favoritos.",
     "Porque és tu. Simplesmente tu."
   ];
   const CANDLES = 5;
@@ -325,14 +372,19 @@
     setTimeout(() => {
       burst(220);
       playTune();
-      const letter = document.getElementById('letter');
-      letter.style.display = 'block';
-      requestAnimationFrame(() => requestAnimationFrame(() => letter.classList.add('show')));
+      const show = (id, delay) => setTimeout(() => {
+        const el = document.getElementById(id);
+        el.style.display = 'block';
+        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+      }, delay);
+      show('heroPhoto', 0);
+      show('letter', 400);
+      show('memories', 900);
       setTimeout(() => {
         document.getElementById('reasons').style.display = 'block';
         document.getElementById('footer').style.display = 'block';
         nextReason();
-        letter.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('heroPhoto').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 500);
     }, CANDLES * 140 + 300);
   }
