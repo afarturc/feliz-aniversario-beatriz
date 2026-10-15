@@ -64,7 +64,7 @@
   }
   h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
   .hint {
-    margin-top: 10px; color: var(--soft); font-size: 1rem;
+    margin-top: 10px; color: var(--soft); font-size: 1rem; text-wrap: balance;
     transition: opacity .6s;
   }
 
@@ -335,9 +335,16 @@
   }
 
   // birthday tune (Parabéns a você / Happy Birthday melody)
+  let ac;
+  function unlockAudio() {
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      if (ac.state === 'suspended') ac.resume();
+    } catch (e) {}
+  }
   function playTune() {
     try {
-      const ac = new (window.AudioContext || window.webkitAudioContext)();
+      if (!ac) return;
       const N = { G4:392, A4:440, B4:493.88, C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99 };
       const song = [
         ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
@@ -365,6 +372,7 @@
   function blow() {
     if (blown) { burst(80); return; }
     blown = true;
+    unlockAudio();
     document.querySelectorAll('.candle').forEach((c, i) => setTimeout(() => c.classList.add('out'), i * 140));
     document.getElementById('hint').style.opacity = 0;
     setTimeout(() => {
